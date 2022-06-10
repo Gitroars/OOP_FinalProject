@@ -1,0 +1,4 @@
+Lieutenant,LT123,false
+Captain,CPT123,false
+Major,MAJ123,false
+Colonel,COL123,false

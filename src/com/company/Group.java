@@ -1,37 +1,29 @@
 package com.company;
 
 public class Group {
-    String username,password,key;
-    boolean canAdd,canUpdate,canDelete,canClear;
-    boolean canPrint,canImport,canExport;
-    public Group(){
+    private String username,password;
+    private int rankPower;
+    private boolean canAdd,canUpdate,canDelete;
+    private boolean isBanned = false;
 
-    }
     public Group(String username,String password){
         this.username = username;
         this.password = password;
-
     }
-
-    public Group(String username, String password, boolean canAdd, boolean canUpdate, boolean canDelete, boolean canClear, boolean canPrint, boolean canImport, boolean canExport) {
+    public Group(String username,String password,boolean isBanned){
         this.username = username;
         this.password = password;
-        this.canAdd = canAdd;
-        this.canUpdate = canUpdate;
-        this.canDelete = canDelete;
-        this.canClear = canClear;
-        this.canPrint = canPrint;
-        this.canImport = canImport;
-        this.canExport = canExport;
+        this.isBanned = isBanned;
     }
+
+
+
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public void setUsername(String username) {this.username = username;}
 
     public String getPassword() {
         return password;
@@ -41,8 +33,50 @@ public class Group {
         this.password = password;
     }
 
+    public int getRankPower() {
+        return rankPower;
+    }
+
+    public void setRankPower(int rankPower) {
+        this.rankPower = rankPower;
+    }
+
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(boolean banned) {
+        isBanned = banned;
+    }
+
+    public boolean isCanAdd() {
+        return canAdd;
+    }
+
+    public void setCanAdd(boolean canAdd) {
+        this.canAdd = canAdd;
+    }
+
+    public boolean isCanUpdate() {
+        return canUpdate;
+    }
+
+    public void setCanUpdate(boolean canUpdate) {
+        this.canUpdate = canUpdate;
+    }
+
+    public boolean isCanDelete() {
+        return canDelete;
+    }
+
+    public void setCanDelete(boolean canDelete) {
+        this.canDelete = canDelete;
+    }
+
+
+
     @Override
     public String toString() {
-        return  username + "," + password +"\n";
+        return  username + "," + password +","+isBanned+"\n";
     }
 }

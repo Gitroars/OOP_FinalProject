@@ -1,8 +1,10 @@
 package com.company;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,25 +22,25 @@ public class RegistrationForm extends JDialog {
     private JTextField keyField;
     private JPanel registrationPanel;
 
-    String operatorKeysTextFile = "operatorKeys.txt";
-    String adminKeysTextFile = "adminKeys.txt";
-    String superadminKeysTextFile = "superadminKeys.txt";
+    private String operatorKeysTextFile = "operatorKeys.txt";
+    private String adminKeysTextFile = "adminKeys.txt";
+    private String superadminKeysTextFile = "superadminKeys.txt";
 
-    String operatorAccountsTextFile = "operatorAccounts.txt";
-    String adminAccountsTextFile = "adminAccounts.txt";
-    String superadminAccountsTextFile = "superadminAccounts.txt";
+    private String operatorAccountsTextFile = "operatorAccounts.txt";
+    private String adminAccountsTextFile = "adminAccounts.txt";
+    private String superadminAccountsTextFile = "superadminAccounts.txt";
 
     public String getOperatorAccountsTextFile(){return operatorAccountsTextFile;}
     public String getAdminAccountsTextFile(){return adminAccountsTextFile;}
     public String getSuperadminAccountsTextFile(){return superadminAccountsTextFile;}
 
-    ArrayList<String> operatorKeys = new ArrayList<>();
-    ArrayList<String> adminKeys= new ArrayList<>();
-    ArrayList<String> superadminKeys = new ArrayList<>();
+    private ArrayList<String> operatorKeys = new ArrayList<>();
+    private ArrayList<String> adminKeys= new ArrayList<>();
+    private ArrayList<String> superadminKeys = new ArrayList<>();
 
-    ArrayList<Operator> operatorArrayList = new ArrayList<>();
-    ArrayList<Admin> adminArrayList = new ArrayList<>();
-    ArrayList<Superadmin> superadminArrayList = new ArrayList<>();
+    private ArrayList<Operator> operatorArrayList = new ArrayList<>();
+    private ArrayList<Admin> adminArrayList = new ArrayList<>();
+    private ArrayList<Superadmin> superadminArrayList = new ArrayList<>();
 
     public ArrayList<Operator> getOperatorArrayList(){return operatorArrayList;}
     public ArrayList<Admin> getAdminArrayList(){return adminArrayList;}
@@ -47,8 +49,8 @@ public class RegistrationForm extends JDialog {
 
 
     public RegistrationForm(boolean isVisible) {
+        JFrame frame = new JFrame();
         if(isVisible){
-            JFrame frame = new JFrame();
             frame.setContentPane(registrationPanel);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
@@ -62,7 +64,11 @@ public class RegistrationForm extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    registerUser();
+                    boolean isRegisterSuccess = registerUser();
+                    if(isRegisterSuccess){ //Confirming the registration is a success, return to the Login Form Page
+                        LoginPage();
+                        frame.setVisible(false);
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -72,10 +78,17 @@ public class RegistrationForm extends JDialog {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                LoginPage();
+                frame.setVisible(false);
             }
+
+
         });
     }
+    void LoginPage(){
+        LoginForm loginForm = new LoginForm();
+    }
+
 
     private ArrayList<String> getKeys(String textFile) throws FileNotFoundException {
         ArrayList<String> keysArrayList =new ArrayList<>();
@@ -94,7 +107,7 @@ public class RegistrationForm extends JDialog {
         }
         fileWriter.close();
     }
-    private void saveAccount(int groupIndex, String textFile) throws IOException {
+    public void saveAccount(int groupIndex, String textFile) throws IOException {
         FileWriter fileWriter = new FileWriter(textFile);
         switch (groupIndex){
             case 0:
@@ -120,7 +133,7 @@ public class RegistrationForm extends JDialog {
     }
 
 
-    private void registerUser() throws IOException {
+    private boolean registerUser() throws IOException {
         operatorKeys = getKeys(operatorKeysTextFile);
         adminKeys = getKeys(adminKeysTextFile);
         superadminKeys = getKeys(superadminKeysTextFile);
@@ -131,7 +144,6 @@ public class RegistrationForm extends JDialog {
 
         if(username.isEmpty()||password.isEmpty()||key.isEmpty()){
             JOptionPane.showMessageDialog(this,"Enter all fields","Missing Input",JOptionPane.ERROR_MESSAGE);
-            return;
         }
         else{
             if(operatorKeys.contains(key)){
@@ -141,6 +153,7 @@ public class RegistrationForm extends JDialog {
                 Operator operator = new Operator(username,password);
                 operatorArrayList.add(operator);
                 saveAccount(0,operatorAccountsTextFile);
+                return true;
             }
             else if(adminKeys.contains(key)){
                 System.out.println("Valid Admin Key");
@@ -149,6 +162,7 @@ public class RegistrationForm extends JDialog {
                 Admin admin = new Admin(username,password);
                 adminArrayList.add(admin);
                 saveAccount(1,adminAccountsTextFile);
+                return true;
             }
             else if(superadminKeys.contains(key)){
                 System.out.println("Valid Superadmin Key");
@@ -157,17 +171,13 @@ public class RegistrationForm extends JDialog {
                 Superadmin superadmin = new Superadmin(username,password);
                 superadminArrayList.add(superadmin);
                 saveAccount(2,superadminAccountsTextFile);
+                return true;
             }
             else{
                 System.out.println("Invalid key");
             }
-
         }
-
-
-
-
-
+        return false;
     }
 
 
