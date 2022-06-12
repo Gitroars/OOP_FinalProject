@@ -1,3 +1,0 @@
-Private,PVT123,false
-Corporal,CPL123,false
-Sergeant,SGT123,false
