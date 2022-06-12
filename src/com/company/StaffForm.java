@@ -1,48 +1,53 @@
 package com.company;
 
-import org.apache.poi.sl.draw.geom.GuideIf;
-
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StaffForm {
-    private Admin currentAdmin;
-    private Superadmin currentSuperadmin;
 
     private int currentUserRankPower;
 
 
 
     private RegistrationForm registrationForm = new RegistrationForm(false);
-    private LoginForm loginForm = new LoginForm();
-    private HashMap<String, ArrayList<String>> operatorMap = new HashMap<>();
-    private HashMap<String, ArrayList<String>> adminMap = new HashMap<>();
-    private HashMap<String, ArrayList<String>> superadminMap = new HashMap<>();
+    private LoginForm loginForm = new LoginForm(false);
+    private HashMap<String, ArrayList<String>> operatorHashMap = new HashMap<>();
+    private HashMap<String, ArrayList<String>> adminHashMap = new HashMap<>();
+    private HashMap<String, ArrayList<String>> superadminHashMap = new HashMap<>();
     private ArrayList<User> userList = new ArrayList<>();
     private JTable table1;
     private JPanel StaffPanel;
     private JButton promoteButton;
     private JButton demoteButton;
     private JButton banUnbanButton;
+    private JButton EXITButton;
+    private JLabel titleLabel;
+    private JLabel nameLabel;
     TableModel dataTable = new TableModel(userList);
 
     public StaffForm(Operator operator,Admin admin,Superadmin superadmin) throws FileNotFoundException {
         // Determine the current user's level of authority
+        String displayName = null;
         if(operator!=null){
-            currentUserRankPower = operator.getRankPower();
-        }
+            displayName = "Operator "+operator.getUsername();
+            currentUserRankPower = operator.getRankPower();}
         else if(admin!= null){
+            displayName = "Admin "+admin.getUsername();
             currentUserRankPower = admin.getRankPower();
         }
         else if(superadmin!=null){
+            displayName = "Superadmin "+superadmin.getUsername();
             currentUserRankPower = superadmin.getRankPower();
         }
+        nameLabel.setText(displayName);
 
         //Create the GUI and manage the settings
         JFrame frame = new JFrame();
@@ -61,34 +66,55 @@ public class StaffForm {
         promoteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PromoteRank();
+                try {
+                    PromoteRank();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         demoteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DemoteRank();
+                try {
+                    DemoteRank();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         banUnbanButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {BanAndUnban();}
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    BanAndUnban();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        EXITButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuForm menuForm = new MenuForm(operator,admin,superadmin);
+                frame.setVisible(false);
+            }
         });
     }
 
     void SetUserList() throws FileNotFoundException {
-        operatorMap = loginForm.getAccounts(registrationForm.getOperatorAccountsTextFile());
-        adminMap = loginForm.getAccounts(registrationForm.getAdminAccountsTextFile());
-        superadminMap = loginForm.getAccounts(registrationForm.getSuperadminAccountsTextFile());
-        for(Map.Entry<String, ArrayList<String>> entry: superadminMap.entrySet()){
+        operatorHashMap = registrationForm.getAccounts(registrationForm.getOperatorAccountsTextFile());
+        adminHashMap = registrationForm.getAccounts(registrationForm.getAdminAccountsTextFile());
+        superadminHashMap = registrationForm.getAccounts(registrationForm.getSuperadminAccountsTextFile());
+        for(Map.Entry<String, ArrayList<String>> entry: superadminHashMap.entrySet()){
             User user = new User(entry.getKey(),"Superadmin",Boolean.parseBoolean(entry.getValue().get(1)),entry.getValue().get(0),2);
             userList.add(user);
         }
-        for(Map.Entry<String, ArrayList<String>> entry: adminMap.entrySet()){
+        for(Map.Entry<String, ArrayList<String>> entry: adminHashMap.entrySet()){
             User user = new User(entry.getKey(),"Admin",Boolean.parseBoolean(entry.getValue().get(1)),entry.getValue().get(0),1);
             userList.add(user);
         }
-        for(Map.Entry<String, ArrayList<String>> entry: operatorMap.entrySet()) {
+        for(Map.Entry<String, ArrayList<String>> entry: operatorHashMap.entrySet()) {
             User user = new User(entry.getKey(),"Operator",Boolean.parseBoolean(entry.getValue().get(1)),entry.getValue().get(0),0);
             userList.add(user);
         }
@@ -98,20 +124,39 @@ public class StaffForm {
         ArrayList<String> valueList = new ArrayList<>();
         valueList.add(user.getPassword());
         valueList.add(user.getIsBanned());
-        if(rank=="Operator"){operatorMap.put(user.getName(),valueList);}
-        else if(rank=="Admin"){adminMap.put(user.getName(),valueList);}
-        else if(rank=="Superadmin"){superadminMap.put(user.getName(),valueList);}
+        if(rank=="Operator"){
+            operatorHashMap.put(user.getName(),valueList);}
+        else if(rank=="Admin"){
+            adminHashMap.put(user.getName(),valueList);}
+        else if(rank=="Superadmin"){
+            superadminHashMap.put(user.getName(),valueList);}
     }
-    void SaveToFile(){
-        operatorMap.clear();
-        adminMap.clear();
-        superadminMap.clear();
+    void SaveToFile() throws IOException {
+        operatorHashMap.clear();
+        adminHashMap.clear();
+        superadminHashMap.clear();
         for(User user:userList){
             SaveHashmap(user.getRank(),user);
         }
-        loginForm.setAccounts(0,operatorMap);
-        loginForm.setAccounts(1,adminMap);
-        loginForm.setAccounts(2,superadminMap);
+
+
+        FileWriter fileWriter = new FileWriter(registrationForm.getOperatorAccountsTextFile());
+        for(Map.Entry<String,ArrayList<String>> entry: operatorHashMap.entrySet()){
+            fileWriter.write(entry.getKey()+","+entry.getValue().get(0)+","+entry.getValue().get(1)+"\n");
+        }
+        fileWriter.close();
+
+        fileWriter = new FileWriter(registrationForm.getAdminAccountsTextFile());
+        for(Map.Entry<String,ArrayList<String>> entry: adminHashMap.entrySet()){
+            fileWriter.write(entry.getKey()+","+entry.getValue().get(0)+","+entry.getValue().get(1)+"\n");
+        }
+        fileWriter.close();
+
+        fileWriter = new FileWriter(registrationForm.getSuperadminAccountsTextFile());
+        for(Map.Entry<String,ArrayList<String>> entry: superadminHashMap.entrySet()){
+            fileWriter.write(entry.getKey()+","+entry.getValue().get(0)+","+entry.getValue().get(1)+"\n");
+        }
+        fileWriter.close();
     }
 
 
@@ -142,7 +187,7 @@ public class StaffForm {
 
 
 
-    void PromoteRank(){
+    void PromoteRank() throws IOException {
         int index = table1.getSelectedRow();
         if(index>-1 && isTargetValid(index)){ //Check whether target do exist and is valid
             String currentRank = userList.get(index).getRank();
@@ -150,9 +195,12 @@ public class StaffForm {
             UpdateTable();
             SaveToFile();
         }
+        else if (!isTargetValid(index)) {
+            JOptionPane.showMessageDialog(null,"You cannot target this user");
+        }
 
     }
-    void DemoteRank(){
+    void DemoteRank() throws IOException {
         int index = table1.getSelectedRow();
         if(index>-1 && isTargetValid(index)){ //Check whether target do exist and is valid
             String currentRank = userList.get(index).getRank();
@@ -160,14 +208,20 @@ public class StaffForm {
             UpdateTable();
             SaveToFile();
         }
+        else if (!isTargetValid(index)) {
+            JOptionPane.showMessageDialog(null,"You cannot target this user");
+        }
     }
 
-    void BanAndUnban(){
+    void BanAndUnban() throws IOException {
         int index = table1.getSelectedRow();
         if(index>-1 && isTargetValid(index)){ //Check whether target do exist and is valid
             userList.get(index).setBanned(!userList.get(index).isBanned()); //Set target banned status the opposite of current banned status
             UpdateTable();
             SaveToFile();
+        }
+        else if (!isTargetValid(index)) {
+            JOptionPane.showMessageDialog(null,"You cannot target this user");
         }
     }
 

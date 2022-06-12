@@ -1,0 +1,3 @@
+General,GEN123,false
+MajorGeneral,MG123,false
+LieutenantGeneral,LTG123,false

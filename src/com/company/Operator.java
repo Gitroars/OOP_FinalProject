@@ -1,6 +1,6 @@
 package com.company;
 
-public class Operator extends Group{
+public class Operator extends Group implements Member{
 
     public Operator(String username,String password){
         super(username,password);

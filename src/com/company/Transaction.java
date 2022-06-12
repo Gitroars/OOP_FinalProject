@@ -9,6 +9,16 @@ public class Transaction {
 
     }
 
+    public Transaction(int day, int month, int year, String date, String description, double debit, double credit) {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.date = date;
+        this.description = description;
+        this.debit = debit;
+        this.credit = credit;
+    }
+
     public Transaction(int number, String date, String description, double debit, double credit, double balance) {
         this.number = number;
         this.date = date;
@@ -88,5 +98,20 @@ public class Transaction {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "number=" + getNumber() +
+                ", day=" + getDay() +
+                ", month=" + getMonth() +
+                ", year=" + getYear() +
+                ", date='" + getDate() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", debit=" + getDebit() +
+                ", credit=" + getCredit() +
+                ", balance=" + getBalance() +
+                '}';
     }
 }

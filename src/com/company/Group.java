@@ -77,6 +77,6 @@ public class Group {
 
     @Override
     public String toString() {
-        return  username + "," + password +","+isBanned+"\n";
+        return  username + "," + password +","+isBanned;
     }
 }
