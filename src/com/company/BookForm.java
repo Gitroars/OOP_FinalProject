@@ -279,7 +279,7 @@ public class BookForm extends Component {
     void UpdateTransaction(){
         int index = table1.getSelectedRow();
         if(index>-1){
-            transactionArrayList.remove(index);
+            transactionArrayList.remove(index);  // Remove the old transaction
             int day = ComboBoxToInteger(dayComboBox.getSelectedItem());
             int month = ComboBoxToInteger(monthComboBox.getSelectedItem());
             int year = ComboBoxToInteger(yearComboBox.getSelectedItem());
@@ -300,7 +300,7 @@ public class BookForm extends Component {
             int newIndex = number-1; //index starts at zero, while numbers starts at one
             System.out.println("New transaction");
             System.out.println("Updated Row");
-            // Remove the old transaction and add the new one
+           // add the new one
             transactionArrayList.add(newIndex,transaction);
             RecalculateNumberAndBalance();
 

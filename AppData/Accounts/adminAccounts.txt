@@ -1,4 +1,5 @@
-LieutenantColonel,LTC123,false
+Corporal,CPL123,true
 Major,MAJ123,false
 Colonel,COL123,false
 Brigadier,BG123,false
+Private,PVT123,false

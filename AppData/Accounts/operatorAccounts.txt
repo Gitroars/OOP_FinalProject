@@ -1,2 +1,1 @@
-Corporal,CPL123,false
-Private,PVT123,true
+LieutenantColonel,LTC123,false
