@@ -96,8 +96,6 @@ public class RegistrationForm extends JDialog {
     void LoginPage() throws FileNotFoundException {
         LoginForm loginForm = new LoginForm(true);
     }
-
-
     private ArrayList<String> getKeys(String textFile) throws FileNotFoundException {
         ArrayList<String> keysArrayList =new ArrayList<>();
         File keysFile = new File(textFile);
@@ -156,8 +154,6 @@ public class RegistrationForm extends JDialog {
         System.out.println("Current Admin Counts:" + temporarySuperadminList.size());
         return temporarySuperadminList;
     }
-
-
     public void saveAccount(int groupIndex, String textFile) throws IOException {
         FileWriter fileWriter = new FileWriter(textFile);
         switch (groupIndex){
@@ -182,8 +178,6 @@ public class RegistrationForm extends JDialog {
             default: break;
         }
     }
-
-
     private boolean registerUser() throws IOException {
         operatorKeys = getKeys(operatorKeysTextFile);
         adminKeys = getKeys(adminKeysTextFile);

@@ -32,7 +32,6 @@ public class FileForm {
     private boolean canAdd,canUpdate,canDeleteClear;
 
 
-
     public FileForm(Operator operator,Admin admin,Superadmin superadmin) throws FileNotFoundException {
         //Create the GUI and manage the settings
         JFrame frame = new JFrame();
@@ -127,7 +126,6 @@ public class FileForm {
         });
     }
 
-
     String getFileName(){
         return newTextField.getText();
     }
@@ -148,7 +146,6 @@ public class FileForm {
         }
         fileWriter.close();
     }
-
 
 
     void NewFile() throws IOException {
@@ -173,7 +170,6 @@ public class FileForm {
         }
 
     }
-
 
     boolean OpenFile() throws IOException {
         int index = table1.getSelectedRow(); // get index of current row
@@ -231,7 +227,6 @@ public class FileForm {
         }
 
     }
-
     private static class TableModel extends AbstractTableModel {
         private final String[] COLUMNS = {"FILE NAME"}; //the column header's name
         private ArrayList<String> fileList;

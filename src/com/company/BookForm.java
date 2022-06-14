@@ -249,7 +249,6 @@ public class BookForm extends Component {
         }
 
     }
-
     void AddTransaction(){
         int day = ComboBoxToInteger(dayComboBox.getSelectedItem());
         int month = ComboBoxToInteger(monthComboBox.getSelectedItem());
@@ -277,10 +276,10 @@ public class BookForm extends Component {
         }
         RecalculateNumberAndBalance();
     }
-
     void UpdateTransaction(){
         int index = table1.getSelectedRow();
         if(index>-1){
+            transactionArrayList.remove(index);
             int day = ComboBoxToInteger(dayComboBox.getSelectedItem());
             int month = ComboBoxToInteger(monthComboBox.getSelectedItem());
             int year = ComboBoxToInteger(yearComboBox.getSelectedItem());
@@ -302,12 +301,11 @@ public class BookForm extends Component {
             System.out.println("New transaction");
             System.out.println("Updated Row");
             // Remove the old transaction and add the new one
-            transactionArrayList.remove(index);
-            transactionArrayList.add(transaction);
+            transactionArrayList.add(newIndex,transaction);
             RecalculateNumberAndBalance();
+
         }
     }
-
     void DeleteTransaction(){
         int index = table1.getSelectedRow(); //the index of current selected row
         if(index>-1){ //It's impossible for the index to be beneath zero, thus it's safe to say the row exist for removal
@@ -315,17 +313,11 @@ public class BookForm extends Component {
             RecalculateNumberAndBalance();
         }
     }
-
     void ClearTransactions(){
         if(!transactionArrayList.isEmpty()){
             transactionArrayList.clear();
         }
     }
-
-
-
-
-
     void SaveTransactions() throws IOException {
         FileWriter fileWriter = new FileWriter(currentFile);
         for(Transaction transaction: transactionArrayList){

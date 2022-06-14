@@ -189,7 +189,7 @@ public class StaffForm {
 
     void PromoteRank() throws IOException {
         int index = table1.getSelectedRow();
-        if(index>-1 && isTargetValid(index)){ //Check whether target do exist and is valid
+        if(index>-1 && currentUserRankPower == 2){ //Check whether target do exist and is valid
             String currentRank = userList.get(index).getRank();
             userList.get(index).setRank(getNextRank(currentRank)); //Set target rank one level higher from current rank
             UpdateTable();

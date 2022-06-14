@@ -32,13 +32,10 @@ public class LoginForm extends Component {
     private Admin currentAdmin = null;
     private Superadmin currentSuperadmin = null;
 
-
     //temporary store for conversion
     private HashMap<String,ArrayList<String>> operatorHashMap = new HashMap<String,ArrayList<String>>();
     private HashMap<String,ArrayList<String>> adminHashMap = new HashMap<String,ArrayList<String>>();
     private HashMap<String,ArrayList<String>> superadminHashMap = new HashMap<String,ArrayList<String>>();
-
-
 
     public LoginForm(boolean isVisible) throws FileNotFoundException {
         //Create GUI
@@ -78,9 +75,6 @@ public class LoginForm extends Component {
 
         });
     }
-
-
-
     private boolean loginAccount() throws FileNotFoundException {
         boolean isLoginSuccessful = false;
         boolean isAccountBanned = false;
