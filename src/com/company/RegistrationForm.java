@@ -106,14 +106,14 @@ public class RegistrationForm extends JDialog {
         }
         return keysArrayList;
     }
-    private void setKeys(ArrayList<String> keysArrayList, String textFile) throws IOException { //Write the key tet file according to current arraylist of keys
+    private void setKeys(ArrayList<String> keysArrayList, String textFile) throws IOException { //Write the key text file according to current arraylist of keys
         FileWriter fileWriter = new FileWriter(textFile);
         for(String key:keysArrayList){
             fileWriter.write(key+"\n");
         }
         fileWriter.close();
     }
-    public HashMap<String,ArrayList<String>> getAccounts(String textFile) throws FileNotFoundException {
+    public HashMap<String,ArrayList<String>> getAccounts(String textFile) throws FileNotFoundException { //Read an account type's text file and put the data inside a map, with the username being the key and the rest being the value in arraylist of string
         HashMap<String, ArrayList<String>> accountsHashMap = new HashMap<String, ArrayList<String>>();
         File keysFile = new File(textFile);
         Scanner scanner = new Scanner(keysFile);
