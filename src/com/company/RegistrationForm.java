@@ -192,6 +192,7 @@ public class RegistrationForm extends JDialog {
             JOptionPane.showMessageDialog(this,"Enter all fields","Missing Input",JOptionPane.ERROR_MESSAGE);
         }
         else{
+            //Check if an arraylist of keys has inputted key. And should it do, remove it from the text file and add the new account
             if(operatorKeys.contains(key)){
                 System.out.println("Valid Operator Key");
                 operatorKeys.remove(key);
@@ -219,7 +220,7 @@ public class RegistrationForm extends JDialog {
                 saveAccount(2,superadminAccountsTextFile);
                 return true;
             }
-            else{
+            else{ //Key is determined to be invalied as it doesn't exist in any of the arraylists of keys
                 System.out.println("Invalid key");
             }
         }
