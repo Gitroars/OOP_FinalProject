@@ -95,7 +95,11 @@ public class KasForm {
         EXITButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FileForm fileForm = new FileForm(currentOperator,currentAdmin,currentSuperadmin);
+                try {
+                    FileForm fileForm = new FileForm(currentOperator,currentAdmin,currentSuperadmin);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 frame.setVisible(false);
             }
         });
