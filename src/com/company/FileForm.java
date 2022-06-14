@@ -206,13 +206,13 @@ public class FileForm {
     }
 
     void DeleteFile() throws IOException {
-        if(canDeleteClear){
-            int index = table1.getSelectedRow();
-            if(index>-1){
-                String fileName = fileList.get(index);
+        if(canDeleteClear){ //Given sufficient permission authority,
+            int index = table1.getSelectedRow(); //get the seleced row's index
+            if(index>-1){ //Check if a row does exist
+                String fileName = fileList.get(index); //get the selected file's name
                 String pathName = "AppData/Books/"+fileName+".txt";
-                File file = new File(pathName);
-                if(file.delete()){
+                File file = new File(pathName); //set the value of the file's path location
+                if(file.delete()){ //If file is deleted, remove it from the list as well
                     fileList.remove(index);
                     dataTable.fireTableDataChanged();
                     SaveFileNames();
