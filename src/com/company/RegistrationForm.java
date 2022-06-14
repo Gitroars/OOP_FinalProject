@@ -24,15 +24,15 @@ public class RegistrationForm extends JDialog {
     private JButton loginButton;
     private JTextField keyField;
     private JPanel registrationPanel;
-
+    // Location Path of Serial Keys text file
     private final String operatorKeysTextFile = "AppData/Accounts/operatorKeys.txt";
     private final String adminKeysTextFile = "AppData/Accounts/adminKeys.txt";
     private final String superadminKeysTextFile = "AppData/Accounts/superadminKeys.txt";
-
+    // Location path of Accounts text file
     private final String operatorAccountsTextFile = "AppData/Accounts/operatorAccounts.txt";
     private final String adminAccountsTextFile = "AppData/Accounts/adminAccounts.txt";
     private final String superadminAccountsTextFile = "AppData/Accounts/superadminAccounts.txt";
-
+   //Getter of location path of accounts
     public String getOperatorAccountsTextFile(){return operatorAccountsTextFile;}
     public String getAdminAccountsTextFile(){return adminAccountsTextFile;}
     public String getSuperadminAccountsTextFile(){return superadminAccountsTextFile;}
@@ -69,7 +69,7 @@ public class RegistrationForm extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 try {
                     boolean isRegisterSuccess = registerUser();
-                    if(isRegisterSuccess){ //Confirming the registration is a success, return to the Login Form Page
+                    if(isRegisterSuccess){ //Confirming the registration is a success, return to the Login Form Page and close registration screen
                         LoginPage();
                         frame.setVisible(false);
                     }
@@ -83,7 +83,7 @@ public class RegistrationForm extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    LoginPage(); frame.setVisible(false);
+                    LoginPage(); frame.setVisible(false); //Open login screen and close registration screen
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
@@ -94,9 +94,9 @@ public class RegistrationForm extends JDialog {
         });
     }
     void LoginPage() throws FileNotFoundException {
-        LoginForm loginForm = new LoginForm(true);
+        LoginForm loginForm = new LoginForm(true); //open login screen
     }
-    private ArrayList<String> getKeys(String textFile) throws FileNotFoundException {
+    private ArrayList<String> getKeys(String textFile) throws FileNotFoundException { //Read a key text file and add each key to the arraylist of keys
         ArrayList<String> keysArrayList =new ArrayList<>();
         File keysFile = new File(textFile);
         Scanner scanner = new Scanner(keysFile);
@@ -106,7 +106,7 @@ public class RegistrationForm extends JDialog {
         }
         return keysArrayList;
     }
-    private void setKeys(ArrayList<String> keysArrayList, String textFile) throws IOException {
+    private void setKeys(ArrayList<String> keysArrayList, String textFile) throws IOException { //Write the key tet file according to current arraylist of keys
         FileWriter fileWriter = new FileWriter(textFile);
         for(String key:keysArrayList){
             fileWriter.write(key+"\n");
@@ -127,7 +127,7 @@ public class RegistrationForm extends JDialog {
         }
         return accountsHashMap;
     }
-    public ArrayList<Operator> getOperatorAccounts(HashMap<String,ArrayList<String>> accountsHashMap){
+    public ArrayList<Operator> getOperatorAccounts(HashMap<String,ArrayList<String>> accountsHashMap){ //Convert the account data in hashmap form into arraylist of operators
         ArrayList<Operator> temporaryOperatorList = new ArrayList<>();
         for (Map.Entry<String, ArrayList<String>> entry : accountsHashMap.entrySet()) {
             Operator operator = new Operator(entry.getKey(), entry.getValue().get(0), Boolean.parseBoolean(entry.getValue().get(1)));
@@ -136,7 +136,7 @@ public class RegistrationForm extends JDialog {
         System.out.println("Current Operator Counts:" + temporaryOperatorList.size());
         return temporaryOperatorList;
     }
-    public ArrayList<Admin> getAdminAccounts(HashMap<String,ArrayList<String>> accountsHashMap) {
+    public ArrayList<Admin> getAdminAccounts(HashMap<String,ArrayList<String>> accountsHashMap) { //Convert the account data in hashmap form into arraylist of admins
         ArrayList<Admin> temporaryAdminList = new ArrayList<>();
         for (Map.Entry<String, ArrayList<String>> entry : accountsHashMap.entrySet()) {
             Admin admin = new Admin(entry.getKey(), entry.getValue().get(0), Boolean.parseBoolean(entry.getValue().get(1)));
@@ -145,7 +145,7 @@ public class RegistrationForm extends JDialog {
         System.out.println("Current Admin Counts:" + temporaryAdminList.size());
         return temporaryAdminList;
     }
-    public ArrayList<Superadmin> getSuperadminAccounts(HashMap<String,ArrayList<String>> accountsHashMap) {
+    public ArrayList<Superadmin> getSuperadminAccounts(HashMap<String,ArrayList<String>> accountsHashMap) { //Convert the account data in hashmap form into arraylist of superadmins
         ArrayList<Superadmin> temporarySuperadminList = new ArrayList<>();
         for (Map.Entry<String, ArrayList<String>> entry : accountsHashMap.entrySet()) {
             Superadmin superadmin = new Superadmin(entry.getKey(), entry.getValue().get(0), Boolean.parseBoolean(entry.getValue().get(1)));
@@ -154,7 +154,7 @@ public class RegistrationForm extends JDialog {
         System.out.println("Current Admin Counts:" + temporarySuperadminList.size());
         return temporarySuperadminList;
     }
-    public void saveAccount(int groupIndex, String textFile) throws IOException {
+    public void saveAccount(int groupIndex, String textFile) throws IOException { //Save the account data from arraylists into their respective text files
         FileWriter fileWriter = new FileWriter(textFile);
         switch (groupIndex){
             case 0:
@@ -179,15 +179,16 @@ public class RegistrationForm extends JDialog {
         }
     }
     private boolean registerUser() throws IOException {
+        //Get the registered available keys
         operatorKeys = getKeys(operatorKeysTextFile);
         adminKeys = getKeys(adminKeysTextFile);
         superadminKeys = getKeys(superadminKeysTextFile);
-
+        //Get the user input
         String username = usernameField.getText();
         String password = String.valueOf(passwordField.getPassword());
         String key = keyField.getText();
 
-        if(username.isEmpty()||password.isEmpty()||key.isEmpty()){
+        if(username.isEmpty()||password.isEmpty()||key.isEmpty()){ //Reject empty user inputs
             JOptionPane.showMessageDialog(this,"Enter all fields","Missing Input",JOptionPane.ERROR_MESSAGE);
         }
         else{
