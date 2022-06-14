@@ -197,6 +197,7 @@ public class BookForm extends Component {
             int previousYear = transaction.getYear();
             int previousMonth = transaction.getMonth();
             int previousDay = transaction.getDay();
+            //Determine whether the current date is before or after the existing dates
             if(currentYear==previousYear){
                 System.out.println("Same year");
                 if(currentMonth==previousMonth){
@@ -280,6 +281,7 @@ public class BookForm extends Component {
         int index = table1.getSelectedRow();
         if(index>-1){
             transactionArrayList.remove(index);  // Remove the old transaction
+            //Create a new transaciton object based on current data input
             int day = ComboBoxToInteger(dayComboBox.getSelectedItem());
             int month = ComboBoxToInteger(monthComboBox.getSelectedItem());
             int year = ComboBoxToInteger(yearComboBox.getSelectedItem());
@@ -315,7 +317,7 @@ public class BookForm extends Component {
     }
     void ClearTransactions(){
         if(!transactionArrayList.isEmpty()){
-            transactionArrayList.clear();
+            transactionArrayList.clear(); //clear the arraylist given it's not empty
         }
     }
     void SaveTransactions() throws IOException {
